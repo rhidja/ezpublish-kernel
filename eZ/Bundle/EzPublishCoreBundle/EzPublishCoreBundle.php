@@ -95,29 +95,32 @@ class EzPublishCoreBundle extends Bundle
     public function getContainerExtension()
     {
         if (!isset($this->extension)) {
-            $this->extension = new EzPublishCoreExtension(
-                array(
-                    // LocationView config parser needs to be specified AFTER ContentView config
-                    // parser since it is used to convert location view override rules to content
-                    // view override rules. If it were specified before, ContentView provider would
-                    // just undo the conversion LocationView did.
-                    new ConfigParser\ContentView(),
-                    new ConfigParser\LocationView(),
-                    new ConfigParser\BlockView(),
-                    new ConfigParser\Common(),
-                    new ConfigParser\Content(),
-                    new ConfigParser\FieldType\RichText(),
-                    new ConfigParser\FieldTemplates(),
-                    new ConfigParser\FieldEditTemplates(),
-                    new ConfigParser\FieldDefinitionSettingsTemplates(),
-                    new ConfigParser\FieldDefinitionEditTemplates(),
-                    new ConfigParser\Image(),
-                    new ConfigParser\Page(),
-                    new ConfigParser\Languages(),
-                    new ConfigParser\IO(new ComplexSettingParser()),
-                    new ConfigParser\UrlChecker(),
-                )
+            $configParsers = array(
+                // LocationView config parser needs to be specified AFTER ContentView config
+                // parser since it is used to convert location view override rules to content
+                // view override rules. If it were specified before, ContentView provider would
+                // just undo the conversion LocationView did.
+                new ConfigParser\ContentView(),
+                new ConfigParser\LocationView(),
+                new ConfigParser\BlockView(),
+                new ConfigParser\Common(),
+                new ConfigParser\Content(),
+                new ConfigParser\FieldTemplates(),
+                new ConfigParser\FieldEditTemplates(),
+                new ConfigParser\FieldDefinitionSettingsTemplates(),
+                new ConfigParser\FieldDefinitionEditTemplates(),
+                new ConfigParser\Image(),
+                new ConfigParser\Page(),
+                new ConfigParser\Languages(),
+                new ConfigParser\IO(new ComplexSettingParser()),
+                new ConfigParser\UrlChecker(),
             );
+
+            if (!class_exists('EzSystems\EzPlatformRichTextFieldTypeBundle\EzPlatformRichTextFieldTypeBundle')) {
+                $configParsers[] = new ConfigParser\FieldType\RichText();
+            }
+
+            $this->extension = new EzPublishCoreExtension($configParsers);
         }
 
         return $this->extension;
