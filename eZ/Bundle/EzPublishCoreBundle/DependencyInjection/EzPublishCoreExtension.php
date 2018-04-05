@@ -184,6 +184,10 @@ class EzPublishCoreExtension extends Extension
     {
         $loader->load('default_settings.yml');
 
+        if (!class_exists('EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle')) {
+            $loader->load('ezrichtext_default_settings.yml');
+        }
+
         foreach ($this->defaultSettingsCollection as $fileLocation => $files) {
             $externalLoader = new Loader\YamlFileLoader($container, new FileLocator($fileLocation));
             foreach ($files as $file) {
