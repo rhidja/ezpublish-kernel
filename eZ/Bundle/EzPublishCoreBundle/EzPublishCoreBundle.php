@@ -90,12 +90,16 @@ class EzPublishCoreBundle extends Bundle
         $securityExtension = $container->getExtension('security');
         $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());
         $container->addCompilerPass(new TranslationCollectorPass());
+
+        if (!$container->hasExtension('ezrichtext')) {
+            $this->getContainerExtension()->addConfigParser(new ConfigParser\FieldType\RichText());
+        }
     }
 
     public function getContainerExtension()
     {
         if (!isset($this->extension)) {
-            $configParsers = array(
+            $this->extension = new EzPublishCoreExtension(array(
                 // LocationView config parser needs to be specified AFTER ContentView config
                 // parser since it is used to convert location view override rules to content
                 // view override rules. If it were specified before, ContentView provider would
@@ -114,13 +118,7 @@ class EzPublishCoreBundle extends Bundle
                 new ConfigParser\Languages(),
                 new ConfigParser\IO(new ComplexSettingParser()),
                 new ConfigParser\UrlChecker(),
-            );
-
-            if (!class_exists('EzSystems\EzPlatformRichTextFieldTypeBundle\EzPlatformRichTextFieldTypeBundle')) {
-                $configParsers[] = new ConfigParser\FieldType\RichText();
-            }
-
-            $this->extension = new EzPublishCoreExtension($configParsers);
+            ));
         }
 
         return $this->extension;
