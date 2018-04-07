@@ -179,12 +179,14 @@ class EzPublishCoreExtension extends Extension
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     *
+     * @throws \Exception
      */
     private function handleDefaultSettingsLoading(ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('default_settings.yml');
 
-        if (!class_exists('EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle')) {
+        if (!$container->hasExtension('ezrichtext')) {
             $loader->load('ezrichtext_default_settings.yml');
         }
 
