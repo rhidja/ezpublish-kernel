@@ -135,6 +135,16 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', null);
     }
 
+    public function testLoadWithoutRichTextPackage()
+    {
+        $this->load();
+    }
+
+    public function testLoadWithRichTextPackage()
+    {
+        $this->load();
+    }
+
     public function testImageMagickConfigurationBasic()
     {
         if (!isset($_ENV['imagemagickConvertPath']) || !is_executable($_ENV['imagemagickConvertPath'])) {
