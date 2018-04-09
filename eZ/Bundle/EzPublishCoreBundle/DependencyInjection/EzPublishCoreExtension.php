@@ -186,7 +186,7 @@ class EzPublishCoreExtension extends Extension
     {
         $loader->load('default_settings.yml');
 
-        if (!$container->hasExtension('ezrichtext')) {
+        if (!array_key_exists('EzPlatformRichTextBundle', $container->getParameter('kernel.bundles'))) {
             $loader->load('ezrichtext_default_settings.yml');
         }
 
