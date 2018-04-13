@@ -354,6 +354,9 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load('utils.yml');
         $coreLoader->load('io.yml');
         $coreLoader->load('policies.yml');
+        if (!array_key_exists('EzPlatformRichTextBundle', $container->getParameter('kernel.bundles'))) {
+            $coreLoader->load('richtext.yml');
+        }
 
         // Public API services
         $loader->load('papi.yml');
@@ -363,6 +366,10 @@ class EzPublishCoreExtension extends Extension
 
         // Storage engine
         $loader->load('storage_engines.yml');
+
+        if (!array_key_exists('EzPlatformRichTextBundle', $container->getParameter('kernel.bundles'))) {
+            $coreLoader->load('richtext.yml');
+        }
     }
 
     /**
