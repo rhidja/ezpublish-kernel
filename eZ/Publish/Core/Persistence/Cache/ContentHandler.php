@@ -108,6 +108,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             function (Content $content) {
                 return $this->getCacheTagsForContent($content);
             },
+            function () use ($contentIds) {
+                $this->logger->logCacheHit(__CLASS__ . '::loadContentList', ['content' => $contentIds]);
+            },
             $keySuffixes
         );
     }
@@ -143,6 +146,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             },
             function (ContentInfo $info) {
                 return $this->getCacheTags($info);
+            },
+            function () use ($contentIds) {
+                $this->logger->logCacheHit(__CLASS__ . '::loadContentInfoList', ['content' => $contentIds]);
             }
         );
     }
