@@ -66,6 +66,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $translationsKey = empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
         $cacheItem = $this->cache->getItem("ez-content-${contentId}-${versionNo}-${translationsKey}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(
+                __METHOD__,
+                ['content' => $contentId, 'version' => $versionNo, 'translations' => $translations]
+            );
+
             return $cacheItem->get();
         }
 
@@ -122,6 +127,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $cacheItem = $this->cache->getItem("ez-content-info-${contentId}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $contentId]);
+
             return $cacheItem->get();
         }
 
@@ -160,6 +167,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $cacheItem = $this->cache->getItem("ez-content-info-byRemoteId-${remoteId}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $remoteId]);
+
             return $cacheItem->get();
         }
 
@@ -179,6 +188,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $cacheItem = $this->cache->getItem("ez-content-version-info-${contentId}-${versionNo}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $contentId, 'version' => $versionNo]);
+
             return $cacheItem->get();
         }
 
@@ -292,6 +303,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status ? "-byStatus-${status}" : ''));
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $contentId, 'status' => $status]);
+
             return $cacheItem->get();
         }
 
