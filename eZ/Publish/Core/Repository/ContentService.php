@@ -390,7 +390,9 @@ class ContentService implements ContentServiceInterface
 
         return $this->domainMapper->buildContentDomainObject(
             $spiContent,
-            null,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            ),
             $languages ?? [],
             $alwaysAvailableLanguageCode
         );
@@ -702,7 +704,10 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildContentDomainObject($spiContent);
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $contentCreateStruct->contentType
+        );
     }
 
     /**
@@ -1117,7 +1122,12 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildContentDomainObject($spiContent);
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            )
+        );
     }
 
     /**
@@ -1521,7 +1531,12 @@ class ContentService implements ContentServiceInterface
             $metadataUpdateStruct
         );
 
-        $content = $this->domainMapper->buildContentDomainObject($spiContent);
+        $content = $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            )
+        );
 
         $this->publishUrlAliasesForContent($content);
 
@@ -2066,7 +2081,12 @@ class ContentService implements ContentServiceInterface
             );
             $this->repository->commit();
 
-            return $this->domainMapper->buildContentDomainObject($spiContent);
+            return $this->domainMapper->buildContentDomainObject(
+                $spiContent,
+                $this->repository->getContentTypeService()->loadContentType(
+                    $spiContent->versionInfo->contentInfo->contentTypeId
+                )
+            );
         } catch (APINotFoundException $e) {
             // avoid wrapping expected NotFoundException in BadStateException handled below
             $this->repository->rollback();
